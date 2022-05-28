@@ -61,7 +61,6 @@ async function run() {
             const quantity = req.body.updatedQuantity;
             const id = req.body.id;
             const filter = { _id: ObjectId(id) };
-            // const options = { upsert: true };
             const updateDoc = {
                 $set: {
                     productQnty: quantity
