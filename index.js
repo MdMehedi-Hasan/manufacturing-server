@@ -148,7 +148,6 @@ async function run() {
         app.get("/users", async (req, res) => {
             const query = {}
             // const authorization = req.headers.authorization
-            // console.log(authorization);
             const result = await usersCollection.find(query).toArray();
             // const email = req.headers.email;
             // const token = jwt.sign({ email: email }, process.env.ACCEESS_TOKEN_SECRET, { expiresIn: '1h' });
