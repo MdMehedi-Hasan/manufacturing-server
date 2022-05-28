@@ -117,7 +117,6 @@ async function run() {
                 }
             }
             const updateInfo = await purchaseCollection.updateOne(filter,updatedDoc,option)
-            // const result = await orderDetailsCollection.insertOne(req.body)
             res.send(updateInfo)
         })
         app.put("/updateStatus", async (req, res) => {
