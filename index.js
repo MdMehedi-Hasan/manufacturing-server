@@ -35,7 +35,6 @@ const usersCollection = client.db("full-stack-project").collection("users");
 const productsCollection = client.db("full-stack-project").collection("products");
 const purchaseCollection = client.db("full-stack-project").collection("purchase");
 const reviewCollection = client.db("full-stack-project").collection("review");
-// const orderDetailsCollection = client.db("full-stack-project").collection("orderDetails");
 
 async function run() {
     try {
