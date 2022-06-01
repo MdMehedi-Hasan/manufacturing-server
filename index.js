@@ -12,7 +12,7 @@ const port = process.env.PORT || 5000
 app.use(cors())
 app.use(express.json())
 
-function verifyJWT(req, res, next) {
+/* function verifyJWT(req, res, next) {
     const authHeader = req.headers.authorization
     console.log("inside function", authHeader);
     if (!authHeader) {
@@ -26,7 +26,7 @@ function verifyJWT(req, res, next) {
         req.decoded = decoded;
         next();
     });
-}
+} */
 
 // =======================================================
 const uri = `mongodb+srv://${process.env.USER}:${process.env.ACCESS}@cluster0.zvb4m.mongodb.net/?retryWrites=true&w=majority`;
@@ -155,6 +155,7 @@ async function run() {
             const query = { email: req.headers.email }
             const result = await usersCollection.findOne(query);
             res.send(result)
+            //====================== This api used in Navbar  =========
         })
         app.put("/users/admin", async (req, res) => {
             const email = req.body.email;
@@ -166,16 +167,16 @@ async function run() {
             res.send(result)
         })
         app.put("/users", async (req, res) => {
-            const email = req.body.email;
-            const user = req.body;
+            const email = req.body.existingUser.email;
+            const user = {email:email}
             const filter = { email: email };
             const options = { upsert: true };
             const updateDoc = {
                 $set: user,
             };
             const result = await usersCollection.updateOne(filter, updateDoc, options);
-            const token = jwt.sign({ email: email }, process.env.ACCEESS_TOKEN_SECRET, { expiresIn: '1h' });
-            res.send({ result, token })
+            // const token = jwt.sign({ email: email }, process.env.ACCEESS_TOKEN_SECRET, { expiresIn: '1h' });
+            res.send( result )
         })
         app.put("/user/update", async (req, res) => {
             const email = req.body.email;
