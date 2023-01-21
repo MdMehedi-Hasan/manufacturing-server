@@ -38,7 +38,7 @@ const reviewCollection = client.db("full-stack-project").collection("review");
 
 async function run() {
     try {
-        await client.connect();
+        // await client.connect();
 
         app.get("/products", async (req, res) => {
             const query = {}
