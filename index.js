@@ -66,7 +66,7 @@ async function run() {
         app.put("/products", async (req, res) => {
             const quantity = req.body.updatedQuantity;
             const id = req.body.id;
-            const filter = { _id: ObjectId(id) };
+            const filter = { _id: new ObjectId(id) };
             const updateDoc = {
                 $set: {
                     productQnty: quantity
@@ -77,7 +77,7 @@ async function run() {
         })
         app.delete("/products", async (req, res) => {
             const id = req.body;
-            const query = { _id: ObjectId(id) }
+            const query = { _id: new ObjectId(id) }
             const result = await productsCollection.deleteOne(query)
             res.send(result)
         })
@@ -100,20 +100,20 @@ async function run() {
         })
         app.get("/purchase/:id", async (req, res) => {
             const id = req.params.id
-            const query = { _id: ObjectId(id) };
+            const query = { _id: new ObjectId(id) };
             const result = await purchaseCollection.findOne(query);
             res.send(result)
         })
         app.delete("/purchase/:id", async (req, res) => {
             const id = req.body.id;
-            const query = { _id: ObjectId(id) }
+            const query = { _id: new ObjectId(id) }
             const result = await purchaseCollection.deleteOne(query)
             console.log(result);
             res.send(result)
         })
         app.put("/purchase/:id", async (req, res) => {
             const id = req.body.id;
-            const filter = { _id: ObjectId(id) };
+            const filter = { _id: new ObjectId(id) };
             const option = { upsert: true }
             const updatedDoc = {
                 $set: {
@@ -127,7 +127,7 @@ async function run() {
         app.put("/updateStatus", async (req, res) => {
             console.log(req.body);
             const id = req.body.id;
-            const filter = { _id: ObjectId(id) }
+            const filter = { _id: new ObjectId(id) }
             const options = { upsert: true };
             const updateDoc = {
                 $set: {
