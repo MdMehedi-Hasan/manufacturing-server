@@ -1,8 +1,10 @@
 const express = require('express')
 require('dotenv').config()
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const { MongoClient, ServerApiVersion } = require('mongodb');
+const ObjectId = require('mongodb').ObjectId
 const cors = require('cors')
 const jwt = require('jsonwebtoken');
+const { response } = require('express');
 const app = express()
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const port = process.env.PORT || 5000
@@ -46,10 +48,15 @@ async function run() {
             res.send(cursor)
         })
         app.get("/products/:id", async (req, res) => {
-            const id = req.params.id
-            const query = { _id: ObjectId(id) };
-            const result = await productsCollection.findOne(query)
-            res.send(result)
+            try {
+                const id = req.params.id
+                const query = { _id: ObjectId(id) };
+                const result = await productsCollection.findOne(query)
+                res.send(result)
+            } catch (error) {
+                console.log(error);
+                res.send(error)
+            }
         })
         app.post("/products", async (req, res) => {
             const product = req.body;
@@ -107,14 +114,14 @@ async function run() {
         app.put("/purchase/:id", async (req, res) => {
             const id = req.body.id;
             const filter = { _id: ObjectId(id) };
-            const option = {upsert:true}
+            const option = { upsert: true }
             const updatedDoc = {
                 $set: {
                     paid: true,
                     transactionId: req.body.transactionId
                 }
             }
-            const updateInfo = await purchaseCollection.updateOne(filter,updatedDoc,option)
+            const updateInfo = await purchaseCollection.updateOne(filter, updatedDoc, option)
             res.send(updateInfo)
         })
         app.put("/updateStatus", async (req, res) => {
@@ -124,10 +131,10 @@ async function run() {
             const options = { upsert: true };
             const updateDoc = {
                 $set: {
-                  status:"shipped"
+                    status: "shipped"
                 },
-              };
-            const result = await purchaseCollection.updateOne(filter,updateDoc,options)
+            };
+            const result = await purchaseCollection.updateOne(filter, updateDoc, options)
             res.send(result)
         })
 
@@ -140,7 +147,7 @@ async function run() {
                 currency: "usd",
                 payment_method_types: ['card']
             });
-            res.send({clientSecret: paymentIntent.client_secret})
+            res.send({ clientSecret: paymentIntent.client_secret })
         })
         // ===========================  User  =============================
         app.get("/users", async (req, res) => {
@@ -168,7 +175,7 @@ async function run() {
         })
         app.put("/users", async (req, res) => {
             const email = req.body.existingUser.email;
-            const user = {email:email}
+            const user = { email: email }
             const filter = { email: email };
             const options = { upsert: true };
             const updateDoc = {
@@ -176,7 +183,7 @@ async function run() {
             };
             const result = await usersCollection.updateOne(filter, updateDoc, options);
             // const token = jwt.sign({ email: email }, process.env.ACCEESS_TOKEN_SECRET, { expiresIn: '1h' });
-            res.send( result )
+            res.send(result)
         })
         app.put("/user/update", async (req, res) => {
             const email = req.body.email;
@@ -211,7 +218,7 @@ async function run() {
         })
 
     } finally {
-        
+
     }
 }
 run().catch(console.dir);
