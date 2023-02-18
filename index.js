@@ -50,7 +50,7 @@ async function run() {
         app.get("/products/:id", async (req, res) => {
             try {
                 const id = req.params.id
-                const query = { _id: ObjectId(id) };
+                const query = { _id: new ObjectId(id) };
                 const result = await productsCollection.findOne(query)
                 res.send(result)
             } catch (error) {
